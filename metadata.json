@@ -1,0 +1,6 @@
+{
+  "name": "Developer Portfolio",
+  "description": "High-end, modern interactive portfolio showcase with elegant animations, high-contrast typography, and a smooth cursor system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
