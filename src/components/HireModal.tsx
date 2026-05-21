@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, CheckCircle2, ChevronRight, CornerDownRight } from 'lucide-react';
+import { PORTFOLIO_OWNER } from '../constants';
 
 interface HireModalProps {
   isOpen: boolean;
@@ -17,12 +18,14 @@ export default function HireModal({ isOpen, onClose }: HireModalProps) {
   
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const apiUrl = (import.meta as any).env?.VITE_API_URL ?? 'http://localhost:3001';
 
   const roles = [
     'Lead Mobile Engineer',
     'AI Integration Architect',
     'Fullstack Web Developer',
-    'Technical Consult / BIM Advisor'
+    'Technical Consult for Secure Deployments'
   ];
 
   const classifications = [
@@ -37,35 +40,67 @@ export default function HireModal({ isOpen, onClose }: HireModalProps) {
     '> $15,000 Enterprise Core'
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !name) return;
 
     setLoading(true);
+    setErrorMessage(null);
 
-    // Latency simulator
-    setTimeout(() => {
+    const proposal = { name, email, role, tier, budget, note };
+    const html = `
+      <p>Hi Sudip,</p>
+      <p>You have received a new secure callback proposal through your portfolio website:</p>
+      <ul>
+        <li><strong>Partner Name:</strong> ${proposal.name}</li>
+        <li><strong>Reachback Endpoint (Email):</strong> ${proposal.email}</li>
+        <li><strong>Proposed Role Field:</strong> ${proposal.role}</li>
+        <li><strong>Engagement Track:</strong> ${proposal.tier}</li>
+        <li><strong>Target Resource Budget:</strong> ${proposal.budget}</li>
+      </ul>
+      <p><strong>Proposition Synopsis:</strong></p>
+      <p>${proposal.note || 'None provided.'}</p>
+      <p>Best regards,<br/>${proposal.name}</p>
+    `;
+
+   try {
+    const response = await fetch(`${apiUrl}/api/send-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      to: PORTFOLIO_OWNER.recipientEmails,
+      subject: `Secure Callback Proposal from ${proposal.name}`,
+      html
+    })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.error || `Email service failed with status ${response.status}`);
+  }
+
       const storedHires = JSON.parse(localStorage.getItem('portfolio_hires') || '[]');
       storedHires.push({
         id: `hire-${Date.now()}`,
-        name,
-        email,
-        role,
-        tier,
-        budget,
-        note,
+        ...proposal,
         date: new Date().toISOString()
       });
       localStorage.setItem('portfolio_hires', JSON.stringify(storedHires));
 
       setLoading(false);
       setSuccess(true);
-      
-      // Clear
       setName('');
       setEmail('');
       setNote('');
-    }, 1500);
+    } catch (error) {
+  console.error('Frontend hire email error:', error);
+  setErrorMessage(
+    error instanceof Error
+      ? error.message
+      : 'Unable to send your proposal right now.'
+  );
+  setLoading(false);
+}
   };
 
   return (
@@ -118,6 +153,12 @@ export default function HireModal({ isOpen, onClose }: HireModalProps) {
                   onSubmit={handleSubmit}
                   className="space-y-6"
                 >
+                  {errorMessage && (
+                    <p className="text-sm text-red-400 font-mono">
+                      {errorMessage}
+                    </p>
+                  )}
+
                   {/* Select Role parameters */}
                   <div>
                     <span className="block font-mono text-[9px] uppercase text-white/40 mb-2 tracking-[0.2em]">

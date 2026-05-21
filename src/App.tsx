@@ -9,6 +9,7 @@ import TechStack from './components/TechStack';
 import ResearchExperience from './components/ResearchExperience';
 import Contact from './components/Contact';
 import HireModal from './components/HireModal';
+import { PORTFOLIO_OWNER } from './constants';
 
 export default function App() {
   const [isHireOpen, setIsHireOpen] = useState(false);
@@ -49,23 +50,23 @@ export default function App() {
           
           {/* Copyright identifier */}
           <div className="font-mono text-xs text-[#8c947a]">
-            &copy; {new Date().getFullYear()} Developer Portfolio. Built with precision
+            &copy; {new Date().getFullYear()} Sudip Mahatara. Built with precision
             <span className="text-[#b3f71e] animate-pulse">_</span>
           </div>
 
+          
+          
           {/* Social Channels listing */}
           <div className="flex gap-8 font-mono text-xs uppercase tracking-widest text-[#8c947a]">
-            {['Github', 'LinkedIn', 'Read.cv', 'Twitter'].map((social) => (
+            {PORTFOLIO_OWNER.socialLinks.map((social) => (
               <a
-                key={social}
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert(`Connecting securely with Sudip Mahatara's live external ${social} profile endpoint. Contact hello@sm.dev to request live references.`);
-                }}
+                key={social.label}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-[#b3f71e] transition-colors"
               >
-                {social}
+                {social.label}
               </a>
             ))}
           </div>

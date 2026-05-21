@@ -2,11 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, CheckCircle2, RefreshCw, Mail, MessageSquare, Briefcase, FileText } from 'lucide-react';
 import { Message } from '../types';
+import { PORTFOLIO_OWNER } from '../constants';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submittedData, setSubmittedData] = useState<{ name: string; email: string; message: string } | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const apiUrl = (import.meta as any).env?.VITE_API_URL ?? 'http://localhost:3001';
   
   // Custom interactive mock messenger state
   const [chatMessages, setChatMessages] = useState<Message[]>([
@@ -69,38 +73,73 @@ export default function Contact() {
   };
 
   // Handle standard manual contact submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
     setIsSubmitting(true);
+    setErrorMessage(null);
 
-    // Simulate database post latency
-    setTimeout(() => {
-      // Store locally
+    const submitted = { ...formData };
+    const html = `
+      <p>Hi Sudip,</p>
+      <p>You have received a new contact submission through your portfolio website:</p>
+      <ul>
+        <li><strong>Sender Name:</strong> ${submitted.name}</li>
+        <li><strong>Sender Email:</strong> ${submitted.email}</li>
+      </ul>
+      <p><strong>Message:</strong></p>
+      <p>${submitted.message.replace(/\n/g, '<br/>')}</p>
+      <p>Best regards,<br/>${submitted.name}</p>
+    `;
+
+    try {
+      const response = await fetch(`${apiUrl}/api/send-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: PORTFOLIO_OWNER.recipientEmails,
+          subject: `Inquiry from ${submitted.name} via Portfolio`,
+          html
+        })
+      });
+
+     if (!response.ok) {
+  const errorData = await response.json().catch(() => null);
+  throw new Error(errorData?.error || `Email service failed with status ${response.status}`);
+}
+
       const storedMails = JSON.parse(localStorage.getItem('portfolio_messages') || '[]');
       storedMails.push({
-        ...formData,
+        ...submitted,
         id: `msg-${Date.now()}`,
         date: new Date().toISOString()
       });
       localStorage.setItem('portfolio_messages', JSON.stringify(storedMails));
 
+      setSubmittedData(submitted);
       setIsSubmitting(false);
       setIsSuccess(true);
       setFormData({ name: '', email: '', message: '' });
 
-      // Add state change notification inside mock messenger
       setChatMessages((prev) => [
         ...prev,
         {
           id: `sys-${Date.now()}`,
           sender: 'system',
-          text: `Secure mail handshake accomplished for client "${formData.name}". Message stored securely in local database. Check storage logs for record ID.`,
+          text: `Secure email dispatch completed for client "${submitted.name}". Message stored locally and sent through the backend service.`,
           timestamp: new Date()
         }
       ]);
-    }, 1500);
+    } catch (error) {
+  console.error('Frontend contact email error:', error);
+  setErrorMessage(
+    error instanceof Error
+      ? error.message
+      : 'Unable to send the message right now.'
+  );
+  setIsSubmitting(false);
+}
   };
 
   return (
@@ -232,6 +271,12 @@ export default function Contact() {
                   <div className="flex items-center gap-2 font-mono text-[9px] tracking-[0.2em] text-white font-bold uppercase mb-4">
                     <Mail className="h-3.5 w-3.5" /> SECURE TRANSMISSION DISPATCH
                   </div>
+
+                  {errorMessage && (
+                    <p className="text-sm text-red-400 font-mono mb-2">
+                      {errorMessage}
+                    </p>
+                  )}
 
                   {/* Name field */}
                   <div>

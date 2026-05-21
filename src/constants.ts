@@ -9,7 +9,14 @@ export const PORTFOLIO_OWNER = {
   location: "Kathmandu, Nepal",
   degree: "Bachelors in Information Management (BIM)",
   experiencePeriod: "2+ Years Professional Engineering",
-  email: "hello@sm.dev"
+  email: "safalmahatara8848@gmail.com",
+  recipientEmails: ["safalmahatara8848@gmail.com"],
+  socialLinks: [
+    { label: "Github", url: "https://github.com/SafalChettri1" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/sudipmahatara" },
+    // { label: "Read.cv", url: "https://read.cv/sudip-mahatara" },
+    { label: "Twitter", url: "https://twitter.com/sudip_mahatara" }
+  ]
 };
 
 export const PROJECTS: Project[] = [
@@ -19,36 +26,31 @@ export const PROJECTS: Project[] = [
     description: "Advanced voice synthesis and command center for localized language processing. Employs embedded whisper models to guarantee sub-50ms latency in air-gapped environments.",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD2vr-p-tjNcqrZrUozug3MTYGE1fckUVsZQ-ZzkF3Hw-w1P3etwnHs46mgaU75TyoezWDXMLynkaRxfIIZHZV_CsvsllBp9p46g4Va6PNvd4vGWLql17imEAfUfFHSVqiJTylaa1GGiSfO9gLh0t3aYxa2otBl7UirzXji_FCDMqBMN3BGXsXvqfvC7anWufdRq3JKjRdrJjXoHayADnEDO03SQWxmWn48t2E092nqFiTywElceQMnjIYry0lCq3VtifXykvgNgxI",
     tags: ["Kotlin", "OpenAI", "On-Device", "Audio Synth"],
-    liveUrl: "https://omni-voice.example.com",
-    githubUrl: "https://github.com/sudip-mahatara/omni-voice",
-    category: "Mobile"
+    category: "web / mobile"
   },
   {
     id: "fitsense-ai",
     title: "FitSense AI",
     description: "Real-time posture correction and exercise tracking using on-device computer vision. Accelerates customized poseestimation models using neural engine cores on Android/iOS.",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCRpDWPlRmfhVi-9mG00gy-nDiIYAGfUU48aIONDBqSXay6V2QGHwgACYUuveOKHZp4YUL2n0hVVw-64G45lOXdCuR7zj60LU7n3KvMwt3nDRyvbJysSichgt4ZfeQQ5ZNGNdPxNp0QzhN-n8KJETrkAiLGY_-SZ6Dr1TsA_ss0nsH3s0DMl8yci-YzPEDZD_3Fr9puXqPZIjKojhoofKsfDPdSLHdWLn2TYTDLscwMTiBphMk42j1AboYi8dQkjezeQVLjqdmqJrY",
-    tags: ["Flutter", "TF Lite", "Computer Vision", "HealthTech"],
-    liveUrl: "https://fitsense.example.com",
-    githubUrl: "https://github.com/sudip-mahatara/fitsense-ai",
-    category: "AI / ML"
+    tags: ["CMP", "TF Lite", "Computer Vision", "HealthTech"],
+    category: "AI / ML, Mobile"
   },
   {
     id: "que-pay",
     title: "Que Pay",
     description: "Streamlined payment gateway for regional vendors with offline ledger support. Handles peer-to-peer offline receipts syncing with cryptographic hashes to prevent double spend.",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuApbwe3yD12Su6CDm5ISwNrLAMxK6YKr7ZRc5wdL2gm-oTlUsbIhSb-usPhMSk-bqQQvik0qLYL6w7C-3HlRwXUFji9reYMGLT28RHdQ00rUKe6DGet-zlv0ri5WViakAlwjZQlak_nFrL7yLynnnIsBbA0b_dFzMiwc6k8krcAZI0A0UoTneI0bLW5MoZOlDnL_yM4hBOLkHRtbQStRUcm8wWC-tIWOfLqH7oenecLKFsl54A2uwfP_ueCxPydt4hjwJqy-IvBpQo",
-    tags: ["Node.js", "Firebase", "Offline-First", "Crypto Ledger"],
-    liveUrl: "https://quepay.example.com",
-    githubUrl: "https://github.com/sudip-mahatara/que-pay",
-    category: "Fullstack"
+    tags: ["Kotlin", "Firebase", "Offline-First", "Crypto Ledger"],
+    liveUrl: "https://play.google.com/store/apps/details?id=net.qpaysolutions.QPay",
+    category: "Mobile"
   }
 ];
 
 export const EXPERIENCES: Experience[] = [
   {
     id: "exp-1",
-    period: "2022 — PRESENT",
+    period: "2024 — PRESENT",
     role: "Software Engineer",
     company: "Que Pay Pvt. Ltd.",
     description: "Leading the mobile development team in creating a seamless financial ecosystem for regional markets. Optimized application performance, state transition delays, and image assets overhead.",
@@ -60,7 +62,7 @@ export const EXPERIENCES: Experience[] = [
   },
   {
     id: "exp-2",
-    period: "2018 — 2022",
+    period: "2020 — 2025",
     role: "BIM Graduation",
     company: "Tribhuvan University",
     description: "Graduated with a focus on Information Management, software engineering fundamentals, database systems, and digital marketing strategies.",
